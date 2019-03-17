@@ -1,0 +1,6 @@
+{
+    "prefix": "!",
+    "discord_token": "Your Discord Token",
+    "danbooru_login": "Your Danbooru Username",
+    "danbooru_token": "Your Danbooru Password"
+}
