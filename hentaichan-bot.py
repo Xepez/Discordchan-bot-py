@@ -3,6 +3,11 @@ from discord.ext import commands
 import json
 import requests
 
+# TODO:
+# Add anime piracy link
+# Add hentai cmd
+# Add cat cmd
+
 with open('config.json') as co:
 	config = json.load(co)
 
