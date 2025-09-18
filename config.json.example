@@ -5,6 +5,7 @@
 
     "safebooru_base_url": "https://safebooru.org/", #  The Safebooru base url
     "safebooru_base_url_test": "",
+    "safebooru_base_post_cap": 6091698,
     "safebooru_login": "Your Safebooru Username",
     "safebooru_token": "Your Safebooru Password",
 
