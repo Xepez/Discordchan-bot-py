@@ -7,8 +7,6 @@ class Randome:
 
     def __init__(self, config):
         self.config = config
-        self.id = 0
-        self.tag_string = ""
 
     # region New
 
