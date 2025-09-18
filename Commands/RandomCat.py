@@ -5,8 +5,8 @@ import json
 class RandomCat:
 
     def __init__(self):
-        result = requests.get('https://cataas.com/cat?json=true')
-        data = json.loads(result)
+        r = requests.get('https://cataas.com/cat?json=true')
+        data = json.loads(r)
         self.url = data['url']
         self.id = data['id']
         self.mimetype = data['mimetype']
