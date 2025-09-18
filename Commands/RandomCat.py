@@ -6,7 +6,10 @@ class RandomCat:
 
     def __init__(self):
         r = requests.get('https://cataas.com/cat?json=true')
-        data = json.loads(r)
+        if r.status_code != 200:
+            return None
+
+        data = json.loads(r.text)
         self.url = data['url']
         self.id = data['id']
         self.mimetype = data['mimetype']
@@ -14,21 +17,21 @@ class RandomCat:
         self.created_at = data['created_at']
 
     # Returns string of url
-    def get_cat_url(self):
-        await self.url
+    async def get_cat_url(self):
+        return self.url
 
     # Returns string of id of image
-    def get_cat_id(self):
-        await self.id
+    async def get_cat_id(self):
+        return self.id
 
     # Returns string of image type
-    def get_cat_mimetype(self):
-        await self.mimetype
+    async def get_cat_mimetype(self):
+        return self.mimetype
 
     # Returns a list of strings of attributes of the cat
-    def get_cat_tags(self):
-        await self.tags
+    async def get_cat_tags(self):
+        return self.tags
 
     # Returns a datetime of when the image was created
-    def get_cat_created_at(self):
-        await self.created_at
+    async def get_cat_created_at(self):
+        return self.created_at

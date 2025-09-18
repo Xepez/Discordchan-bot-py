@@ -12,16 +12,13 @@ with open('config.json') as co:
     config = json.load(co)
 
 # Bot Setup
-bot = commands.Bot(command_prefix=config.prefix)
-
-# unsure if needed
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Client(intents=intents)
+bot = commands.Bot(intents=intents, command_prefix=config['prefix'])
 
 
 @bot.event
-async def on_ready(self):
+async def on_ready():
     print(f'We have logged in as {bot.user}')
 
 # region Commands
@@ -37,21 +34,29 @@ async def on_ready(self):
 
 
 @bot.command()
-async def ping(self, ctx):
+async def ping(ctx):
     await ctx.send('pong')
 
 
 @bot.command()
-async def cat(self, ctx):
-    await CatCommand.RandomCat().get_cat_url()
+async def cat(ctx):
+    cat_obj = CatCommand.RandomCat()
+    if cat_obj is None:
+        await ctx.send(config["default_error"] + 'cat image')
+
+    await ctx.send(await cat_obj.get_cat_url())
 
 
 @bot.command()
-async def randome(self, ctx):
-    await Randome.Randome(config).get_random_image()
+async def randome(ctx):
+    randome_obj = Randome.Randome(config)
+    if randome_obj is None:
+        await ctx.send(config["default_error"] + 'random anime image')
+
+    await ctx.send(await randome_obj.get_random_image())
 
 # endregion
 
-bot.run(config["discord_token"], handler)
+bot.run(config["discord_token"], log_handler=handler)
 
 
