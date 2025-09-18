@@ -3,7 +3,7 @@ from discord.ext import commands
 import json
 import logging
 import Commands.RandomCat as CatCommand
-import Commands.Randome as Randome
+import Commands.RandomPicture as Randome
 
 handler = logging.FileHandler(filename='discordchan.log', encoding='utf-8', mode='w')
 
@@ -44,7 +44,7 @@ async def cat(ctx):
     if cat_obj is None:
         await ctx.send(config["default_error"] + 'cat image')
 
-    await ctx.send(await cat_obj.get_cat_url())
+    await ctx.send(cat_obj.url)
 
 
 @bot.command()

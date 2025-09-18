@@ -20,8 +20,8 @@ class Randome():
         if r.status_code != 200:
             await None
 
-        self.data = json.loads(r.data)
-        return await self.data['file_url']
+        self.data = json.loads(r.text)
+        return self.data['file_url']
 
 
     # endregion
