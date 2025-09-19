@@ -4,6 +4,7 @@ import logging
 
 import json
 import asyncio
+import youtube_dl
 
 import Commands.RandomCat as CatCommand
 import Commands.RandomPicture as Randome
@@ -26,6 +27,31 @@ intents.message_content = True
 help_command = commands.DefaultHelpCommand(no_category='Commands')
 
 bot = commands.Bot(intents=intents, command_prefix=config['prefix'], help_command=help_command)
+
+
+# endregion
+
+# region Youtube Streaming Setup
+
+
+# Suppress noise about console usage from errors
+youtube_dl.utils.bug_reports_message = lambda: ''
+
+ytdl_format_options = {
+    'format': 'bestaudio/best',
+    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'restrictfilenames': True,
+    'noplaylist': True,
+    'nocheckcertificate': True,
+    'ignoreerrors': False,
+    'logtostderr': False,
+    'quiet': True,
+    'no_warnings': True,
+    'default_search': 'auto',
+    'source_address': config["ipv4"],  # bind to ipv4 since ipv6 addresses cause issues sometimes
+}
+
+ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 
 # endregion

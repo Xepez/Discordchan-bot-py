@@ -2,6 +2,7 @@
     "base_windows_path": "C:\\Users\\<computer name>\\Discordchan-bot-py"
     "ffmpeg_windows_path": "C:\\Users\\<computer name>\\Discordchan-bot-py\\bin\\ffmpeg.exe",
     "test_sound_path": "C:\\Users\\<computer name>\\Discordchan-bot-py\\sounds\\grunt-birthday-party.mp3",
+    "ipv4": "xx.x.x.xx",
 
     "prefix": "!",
     "discord_token": "Your Discord Token",
