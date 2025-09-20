@@ -2,12 +2,14 @@ import discord
 from discord.ext import commands
 import logging
 
+import Voice.Voice as Voice
+
 import json
 import asyncio
 import youtube_dl
 
 import Commands.RandomCat as CatCommand
-import Commands.RandomPicture as Randome
+import Commands.RandomPicture as RandomeCommand
 
 
 handler = logging.FileHandler(filename='discordchan.log', encoding='utf-8', mode='w')
@@ -19,40 +21,16 @@ handler = logging.FileHandler(filename='discordchan.log', encoding='utf-8', mode
 with open('config.json') as co:
     config = json.load(co)
 
-
 intents = discord.Intents.default()
-intents.message_content = True
+intents.message_content = True  # needed?
 
 # Help
 help_command = commands.DefaultHelpCommand(no_category='Commands')
 
 bot = commands.Bot(intents=intents, command_prefix=config['prefix'], help_command=help_command)
 
-
-# endregion
-
-# region Youtube Streaming Setup
-
-
-# Suppress noise about console usage from errors
-youtube_dl.utils.bug_reports_message = lambda: ''
-
-ytdl_format_options = {
-    'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
-    'restrictfilenames': True,
-    'noplaylist': True,
-    'nocheckcertificate': True,
-    'ignoreerrors': False,
-    'logtostderr': False,
-    'quiet': True,
-    'no_warnings': True,
-    'default_search': 'auto',
-    'source_address': config["ipv4"],  # bind to ipv4 since ipv6 addresses cause issues sometimes
-}
-
-ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-
+# Voice
+voice = Voice.Voice(config)
 
 # endregion
 
@@ -74,6 +52,11 @@ async def ping(ctx):
     await ctx.send('pong')
 
 
+@bot.command(brief="Nick")
+async def nick(ctx):
+    await ctx.send(content='Nick is a is a great human and I cherish his friendship', tts=True)
+
+
 @bot.command(brief="Cat Picture")
 async def cat(ctx):
     cat_obj = CatCommand.RandomCat()
@@ -85,7 +68,7 @@ async def cat(ctx):
 
 @bot.command(brief="Anime Picture")
 async def randome(ctx):
-    randome_obj = Randome.Randome(config)
+    randome_obj = RandomeCommand.Randome(config)
     if randome_obj is None:
         await ctx.send(config["default_error"] + 'random anime image')
 
@@ -94,7 +77,7 @@ async def randome(ctx):
 
 @bot.command(brief="Anime Picture V2")
 async def randome2(ctx):
-    randome_obj = Randome.Randome(config)
+    randome_obj = RandomeCommand.Randome(config)
     if randome_obj is None:
         await ctx.send(config["default_error"] + 'random image')
 
@@ -104,18 +87,11 @@ async def randome2(ctx):
 #  TODO
 @bot.command(brief="Play a song")
 async def play(ctx, url):
-    if url.startswidth("https://www.youtube.com/watch?v="):
-        ctx.send("Not a valid url")
-    else:
-        # Get requesting users channel and connect to it
+    if url.startswith("https://www.youtube.com/watch?v="):
         channel = ctx.message.author.voice.channel
-        vc = await discord.VoiceChannel.connect(channel)
-
-        # play audio
-        player = await vc.create_ytdl_player(url)
-        player.start()
-
-        # clean up?
+        await voice.play_yt_link(channel, url)
+    else:
+        ctx.send("Not a valid url")
 
 
 @bot.command(brief="Disconnect Bot")
@@ -127,8 +103,7 @@ async def stop(ctx):
 async def play_url_test(ctx):
     # Get requesting users channel and connect to it
     channel = ctx.message.author.voice.channel
-    vc = await discord.VoiceChannel.connect(channel)
-    vc.play(discord.FFmpegPCMAudio(source=config["test_sound_path"], executable=config["ffmpeg_windows_path"]))
+    await voice.play_file(channel, config["test_sound_path"])
 
 
 # endregion
