@@ -1,8 +1,5 @@
-import requests
 import json
-import random as rand
 import discord
-from discord.ext import commands
 import youtube_dl  # TODO: NEED TO CHANGE TO yt-dlp due to deprecation
 
 

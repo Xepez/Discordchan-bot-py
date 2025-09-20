@@ -46,15 +46,23 @@ async def on_ready():
 
 # region Commands
 
+# region Text
+
 
 @bot.command(brief="Pong")
 async def ping(ctx):
     await ctx.send('pong')
 
 
+# TODO: Limit access since TTS?
 @bot.command(brief="Nick")
 async def nick(ctx):
     await ctx.send(content='Nick is a is a great human and I cherish his friendship', tts=True)
+
+
+# endregion
+
+# region Pictures
 
 
 @bot.command(brief="Cat Picture")
@@ -84,7 +92,11 @@ async def randome2(ctx):
     await ctx.send(await randome_obj.get_random_image_2())
 
 
-#  TODO
+# endregion
+
+# region Voice
+
+
 @bot.command(brief="Play a song")
 async def play(ctx, url):
     if url.startswith("https://www.youtube.com/watch?v="):
@@ -94,16 +106,18 @@ async def play(ctx, url):
         ctx.send("Not a valid url")
 
 
+@bot.command(brief="Play grunt yay")
+async def play_url_test(ctx):
+    channel = ctx.message.author.voice.channel
+    await voice.play_file(channel, config["test_sound_path"])
+
+
 @bot.command(brief="Disconnect Bot")
 async def stop(ctx):
     await ctx.bot.voice_clients[0].disconnect()
 
 
-@bot.command(brief="Play grunt yay")
-async def play_url_test(ctx):
-    # Get requesting users channel and connect to it
-    channel = ctx.message.author.voice.channel
-    await voice.play_file(channel, config["test_sound_path"])
+# endregion
 
 
 # endregion
