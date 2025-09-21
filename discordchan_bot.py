@@ -100,10 +100,14 @@ async def randome2(ctx):
 @bot.command(brief="Play a song")
 async def play(ctx, url):
     if url.startswith("https://www.youtube.com/watch?v="):
+        if ctx.message.author.voice is None:
+            await ctx.send("You are not connected to a server")
+            return
+
         channel = ctx.message.author.voice.channel
         await voice.play_yt_link(channel, url)
     else:
-        ctx.send("Not a valid url")
+        await ctx.send("Not a valid url")
 
 
 @bot.command(brief="Play grunt yay")

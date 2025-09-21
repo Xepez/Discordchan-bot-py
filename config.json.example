@@ -1,10 +1,10 @@
 {
+    "prefix": "!",
+    "discord_token": "Your Discord Token",
+
     "base_windows_path": "C:\\Users\\<computer name>\\Discordchan-bot-py"
     "ffmpeg_windows_path": "C:\\Users\\<computer name>\\Discordchan-bot-py\\bin\\ffmpeg.exe",
     "test_sound_path": "C:\\Users\\<computer name>\\Discordchan-bot-py\\sounds\\grunt-birthday-party.mp3",
-
-    "prefix": "!",
-    "discord_token": "Your Discord Token",
 
     "safebooru_base_url": "https://safebooru.org/", #  The Safebooru base url
     "safebooru_base_url_test": "",

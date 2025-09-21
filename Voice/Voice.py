@@ -1,17 +1,15 @@
 import json
 import discord
-import youtube_dl  # TODO: NEED TO CHANGE TO yt-dlp due to deprecation
-
+# import youtube_dl  # TODO: NEED TO CHANGE TO yt-dlp due to deprecation
+import yt_dlp
 
 # Config
 with open('config.json') as co:
     config = json.load(co)
 
-youtube_dl.utils.bug_reports_message = lambda: ''
-
 ydl_opts = {
     'format': 'bestaudio/best',
-    'outtmpl': '%(id).mp3',
+    # 'outtmpl': '%(id).mp3',
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
@@ -42,19 +40,24 @@ class Voice:
         if vc is None:
             return config["default_error"] + 'channel'
 
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            # try:
+            #     ydl.download([url])
+            # except Exception as e:
+            #     e = e
+            search_results = ydl.extract_info(f"ytsearch1:{url}", download=False)
+            if 'entries' not in search_results:
+                return "No suitable format found. Please try another video."
+
+            video_url = search_results['entries'][0]['url']
             try:
-                ydl.download([url])
+                # audio is getting fucked up
+                vc.play(discord.FFmpegPCMAudio(source=video_url, executable=config["ffmpeg_windows_path"]))
             except Exception as e:
-                e=e
+                e = e
 
-        file_path = ydl
-
-        # play audio
-        vc.play(discord.FFmpegPCMAudio(source=file_path, executable=config["ffmpeg_windows_path"]))
-
-        # clean up
-
+        # # clean up
+        # await self._clean_up(video_url)
 
     async def play_file(self, channel, file_path):
         vc = await self._channel_connect(channel)
@@ -76,3 +79,8 @@ class Voice:
     async def _sync_channel(self, new_channel):
         if new_channel is not None and self.current_channel != new_channel:
             self.current_channel = new_channel
+
+    async def _clean_up(self, file_path):
+        # delete file_path
+        # ^ downloaded song
+        return
